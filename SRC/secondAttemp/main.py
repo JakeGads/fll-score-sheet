@@ -10,19 +10,17 @@ import xlwt
 
 
 class Team():
-    def init(self, number=None, name=None, json_file=None):
+    def init(self, number=None, name=None, json_data=None):
         if number is not None and name is not None:
             self.number = number
             self.name = name
             self.scores = []
             self.average = self.gen_average()
-        else:
-            with open(json_file) as file_in:
-                data = load(file_in)
-                self.number = data['number']
-                self.name = data['name']
-                self.scores = data['scores']
-                self.average = self.gen_average()
+        elif json_data is not None:
+            self.number = json_data['number']
+            self.name = json_data['name']
+            self.scores = json_data['scores']
+            self.average = self.gen_average()
 
     def add_score(self, score):
         self.scores.append(score)
@@ -42,7 +40,7 @@ class Team():
         return round(average/spots)
 
     def kill(self):
-        dumps({
+        return dumps({
             'number': self.number,
             'name': self.name,
             'scores': self.scores,
@@ -66,9 +64,12 @@ def readTeamsXL(file):
             logging.error('Failed to add {number} {name}'.format(number=number, name=name))
 
 def readTeamsJSON():
-    
-    
+    with open('Teams.json', 'r') as inRead:
+        data = load(inRead)
 
+        for i in data:
+            teams.append(Team(json_data=i))
+    
 def endProcess():
     endTeams = []
     for i in teams:
