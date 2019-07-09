@@ -119,7 +119,44 @@ def index():
 
 @app.route('/scoreboard')
 def scoreboard():
-    return render_template('scoreboard.html')
+    html = '''
+    <table style=\"width:100%\">
+        <tr>
+            <th>
+            Postion
+            </th>
+            <th>
+            Team Number
+            </th>
+            <th>
+            Team Name
+            </th>
+            <th>
+            Top {average} Average
+            </th>
+    '''.format(average= TOPSCORES)
+
+    counter = 0
+
+    for i in teams:
+        counter += 1
+        html += '''
+            <tr>
+                <th>
+                    {postion}
+                </th>
+                <th>
+                    {number}
+                </th>
+                <th>
+                    {name}
+                </th>
+        '''.format( postion = counter, number = i.number, name = i.name, average = i.gen_average())
+    
+    html += '''
+    </table>
+    '''
+    return html
 
 @app.route('/entryForm')
 def entryForm():
