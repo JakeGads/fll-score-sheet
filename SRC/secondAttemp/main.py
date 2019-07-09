@@ -2,9 +2,10 @@
 from json import load, loads, dump, dumps
 from config import FONT_SIZE, TOPSCORES
 import logging
+import tkinter
 
 # installed using pip (pip install <packagename>
-from flask import Flask
+from flask import Flask, render_template
 import xlrd # TODO come back set the needed functions
 import xlwt
 
@@ -70,9 +71,56 @@ def readTeamsJSON():
         for i in data:
             teams.append(Team(json_data=i))
     
-def endProcess():
+def updateJSON():
     endTeams = []
     for i in teams:
         endTeams.append(i.kill())
+    #dump but pretty
+    dump(dumps(endTeams),'Teams.json', indent=4)
 
-    dump(dumps(endTeams),'Teams.json')
+def sortTeam():
+    for i in range(len(teams)):   
+        # Find the minimum element in remaining unsorted array 
+        max_idx = i 
+        for j in range(i+1, len(teams)): 
+            if teams[max_idx].gen_average() < teams[j].gen_average(): 
+                max_idx = j 
+        # Swap the found minimum element with the first element         
+        teams[i], teams[max_idx] = teams[max_idx], teams[i] 
+
+def writeExcel(loc):
+    book = xlwt.Workbook()
+    sheet = book.add_sheet('Results')
+    row = sheet.row(0)
+    row.write(0, 'Team Number')
+    row.write(1, 'Team Name')
+    row.write(2, 'Top {avgNum} Avg'.format(avgNum= TOPSCORES))
+
+    for i in range(len(teams[0].scores())):
+        # so im just really gonna hope that the top team has shown up to all possible matches if not its still gonna write the scores out but it will look more wonky
+        row.write(i+2, 'Score {number}'.format(number = i + 1))
+    
+    for i in range(len(teams)):
+        row = sheet.row(i+1)
+        row.write(0, teams[i].number)
+        row.write(1, teams[i].name)
+        row.write(2, teams[i].gen_average())
+        teams[i].scores.sort()
+        for h in range(len(teams[i].scores)):
+            row.write(h+2, teams[i].scores[h])
+
+# now we start handling all of the flask stuff
+app = Flask(__name__)
+
+@app.route('/')
+@app.route('/index')
+def index():
+    return render_template('index.html')
+
+@app.route('/scoreboard')
+def scoreboard():
+    return render_template('scoreboard.html')
+
+@app.route('/entryForm')
+def entryForm():
+    return render_template('entryForm.html')
