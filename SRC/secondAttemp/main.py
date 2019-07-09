@@ -4,7 +4,7 @@ from config import FONT_SIZE, TOPSCORES
 import logging
 import tkinter
 
-# installed using pip (pip install <packagename>
+# installed using pip (pip install <packagename>)
 from flask import Flask, render_template
 import xlrd # TODO come back set the needed functions
 import xlwt
