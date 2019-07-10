@@ -2,6 +2,7 @@ import xlrd
 import logging
 from flask import Flask
 from config import FONT_SIZE,  TOPSCORES
+from tkinter 
 
 
 book = None
@@ -47,7 +48,7 @@ if one or both tho the sheets are not there the program will not run (see exampl
 
 
 def get_teams():
-    book = xlrd.open_workbook(input('Excel File (can be dragged and dropped for windows)'))
+    teams = []
 
     sheet = book.sheet_by_name('Teams')
 
@@ -63,11 +64,37 @@ def get_teams():
 def get_scores():
     sheet = book.sheet_by_name('Entry')
 
-    for i in range(sheet.nrows - 1):
-        value = sheet.cell(i,0).value
-        if type(value) == type(1):
-            for team in teams:
-                if i is team.number:
+    try:
+        for i in range(sheet.nrows - 1):
+            teamNumber = sheet.cell(i,0).value
+            score = sheet.cell(i,1).value
+            if type(teamNumber) == type(1):
+                for team in teams:
+                    if i is team.number:
+                        team.scores.append(score)
+    except:
+        None
+
+def sortTeams():
+    for i in range(len(teams)):   
+        # Find the minimum element in remaining unsorted array 
+        max_idx = i 
+        for j in range(i+1, len(teams)): 
+            if teams[max_idx].gen_average() < teams[j].gen_average(): 
+                max_idx = j 
+        # Swap the found minimum element with the first element         
+        teams[i], teams[max_idx] = teams[max_idx], teams[i]
+
+app = Flask(__name__)
+
+@app.route('/')
+def updateScoreBoard():
+    # auto scroll JS Command “var scroll = setInterval(function(){ window.scrollBy(0,1000); }, 2000);”
+    # refresh JS Command "document.location.reload(True)"
+    get_teams()
+    sortTeams()    
 
 
-
+if __name__ == "__main__":
+    book = filedialog.askopenfilename(initialdir = "/",title = "Select File",filetypes = (("xlsx files","*.xlsx"),("all files","*.*")))
+    app.run()
