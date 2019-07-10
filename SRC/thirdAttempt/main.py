@@ -1,8 +1,9 @@
 import xlrd
 import logging
 from flask import Flask
+from tkinter import filedialog
 from config import FONT_SIZE,  TOPSCORES
-from tkinter 
+
 
 
 book = None
@@ -92,7 +93,76 @@ def updateScoreBoard():
     # auto scroll JS Command “var scroll = setInterval(function(){ window.scrollBy(0,1000); }, 2000);”
     # refresh JS Command "document.location.reload(True)"
     get_teams()
-    sortTeams()    
+    sortTeams()
+
+    maxRound = 0
+
+    for team in teams:
+        if len(team.scores) > maxRound:
+            maxRound = len(team.scores)
+
+
+    html = '''
+    <table style=\"width:100%\">
+        <tr>
+            <th>
+            Postion
+            </th>
+            <th>
+            Team #
+            </th>
+            <th>
+            Team Name
+            </th>
+            '''
+
+    for team in range(maxRound):
+        html += '''
+                <th>
+                Round {roundNum}
+                </th>
+                '''.format(roundNum = team + 1)
+
+
+    html += '''
+            <th>
+            Top {average} Average
+            </th>
+    '''.format(average= TOPSCORES)
+
+    counter = 0
+
+    for team in teams:
+        counter += 1
+        html += '''
+            <tr>
+                <th>
+                    {postion}
+                </th>
+                <th>
+                    {number}
+                </th>
+                <th>
+                    {name}
+                </th>
+        '''.format( postion = counter, number = team.number, name = team.name)
+
+        for score in team.scores:
+            html +=  '''
+                        <th>
+                        {score}
+                        </th>
+                     '''.format(score=score)
+
+        html += '''
+                <th>
+                {average}
+                </th>
+                '''.format(average = team.genAverage())
+    html += '''
+    </table>
+    '''
+    return html    
 
 
 if __name__ == "__main__":
