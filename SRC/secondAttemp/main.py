@@ -151,7 +151,7 @@ def scoreboard():
                 <th>
                     {name}
                 </th>
-        '''.format( postion = counter, number = i.number, name = i.name, average = i.gen_average())
+        '''.format( postion = counter, number = i.number, name = i.name)
     
     html += '''
     </table>
