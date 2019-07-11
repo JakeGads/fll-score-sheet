@@ -24,11 +24,11 @@ class Team():
         orderedScores.sort()
 
         sum = 0
-        count = 0
+        count = 1
         for i in range(TOPSCORES):
             try:
-                count += 1
                 sum += orderedScores[i]
+                count += 1
             except:
                 None
 
@@ -71,7 +71,7 @@ def get_scores():
             score = sheet.cell(i,1).value
             if type(teamNumber) == type(1):
                 for team in teams:
-                    if i is team.number:
+                    if teamNumber is team.number:
                         team.scores.append(score)
     except:
         None
@@ -164,8 +164,10 @@ def updateScoreBoard():
                 <th>
                 {average}
                 </th>
+            
                 '''.format(average = team.genAverage())
     html += '''
+    </tr>
     </table>
     '''
     return html    
