@@ -147,13 +147,19 @@ def updateScoreBoard():
                 </th>
         '''.format( postion = counter, number = team.number, name = team.name)
 
-        for score in team.scores:
-            html +=  '''
-                        <th>
-                        {score}
-                        </th>
-                     '''.format(score=score)
-
+        for i in range(maxRound):
+            try:
+                html +=  '''
+                            <th>
+                            {score}
+                            </th>
+                        '''.format(team.scores[i])
+            except:
+                html += '''
+                            <th>
+                            N/A
+                            </th>
+                        '''
         html += '''
                 <th>
                 {average}
