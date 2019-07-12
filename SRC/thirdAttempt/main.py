@@ -174,5 +174,5 @@ def updateScoreBoard():
 
 
 if __name__ == "__main__":
-    book = filedialog.askopenfilename(initialdir = "/",title = "Select File",filetypes = (("xlsx files","*.xlsx"),("all files","*.*")))
+    book = filedialog.askopenfilename(initialdir = "/",title = "Select File",filetypes = (("xlsx files","*.xlsx"),("xls files","*.xls"),("all files","*.*")))
     app.run()
