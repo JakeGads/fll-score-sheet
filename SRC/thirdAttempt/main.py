@@ -49,16 +49,15 @@ if one or both tho the sheets are not there the program will not run (see exampl
 
 
 def get_teams():
-    teams = []
-
     sheet = book.sheet_by_name('Teams')
 
     for i in range(sheet.nrows - 1):
+        
         try:
             teams.append(Team(number=int(sheet.cell(i,0).value), name=sheet.cell(i,1).value))
         except:
-            None
-
+            print('Error adding {number} to the list'.format(number = sheet.cell(i,0).value))
+    
     get_scores()
 
 
@@ -67,14 +66,26 @@ def get_scores():
 
     try:
         for i in range(sheet.nrows - 1):
-            teamNumber = sheet.cell(i,0).value
-            score = sheet.cell(i,1).value
-            if type(teamNumber) == type(1):
+            teamNumber = int(sheet.cell(i,0).value)
+            score = int(sheet.cell(i,1).value)
+
+            if isinstance(teamNumber, (int, float)):
                 for team in teams:
                     if teamNumber is team.number:
                         team.scores.append(score)
+                        
+
+
+            else:
+                print(False)
+            '''
+            elif isinstance(teamNumber, float):
+                for team in teams:
+                    if teamNumber is team.number:
+                        team.scores.append(score)
+            '''
     except:
-        None
+        print('Failed to add Score')
 
 def sortTeams():
     for i in range(len(teams)):   
@@ -92,7 +103,6 @@ app = Flask(__name__)
 def updateScoreBoard():
     # auto scroll JS Command “var scroll = setInterval(function(){ window.scrollBy(0,1000); }, 2000);”
     # refresh JS Command "document.location.reload(True)"
-    get_teams()
     sortTeams()
 
     maxRound = 0
@@ -157,7 +167,7 @@ def updateScoreBoard():
             except:
                 html += '''
                             <th>
-                            N/A
+                            
                             </th>
                         '''
         html += '''
@@ -174,5 +184,10 @@ def updateScoreBoard():
 
 
 if __name__ == "__main__":
-    book = xlrd.open_workbook(filedialog.askopenfilename(initialdir = "/",title = "Select File",filetypes = (("xlsx files","*.xlsx"),("xls files","*.xls"),("all files","*.*"))))
+    # book = xlrd.open_workbook(filedialog.askopenfilename(initialdir = "/",title = "Select File",filetypes = (("xlsx files","*.xlsx"),("xls files","*.xls"),("all files","*.*"))))
+    book = xlrd.open_workbook('example.xls')
+    get_teams()
+    for team in teams:
+        print('{number}         {scores}'.format(number = team.number, scores = team.scores))    
+    input()
     app.run()

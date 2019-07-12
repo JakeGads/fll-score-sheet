@@ -46,6 +46,15 @@ writable = [
     [2539, 'Krypton Cougers'],
 ]
 
+for i in range(len(writable)):   
+        # Find the minimum element in remaining unsorted array 
+        max_idx = i 
+        for j in range(i+1, len(writable)): 
+            if writable[max_idx][0] < writable[j][0]: 
+                max_idx = j 
+        # Swap the found minimum element with the first element         
+        writable[i], writable[max_idx] = writable[max_idx], writable[i]
+
 workbook = xlwt.Workbook()
 teamSheet = workbook.add_sheet(sheetname='Teams')
 entrySheet = workbook.add_sheet(sheetname='Entry')
