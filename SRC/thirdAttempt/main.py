@@ -19,7 +19,7 @@ class Team():
 
         orderedScores = []
         for i in self.scores:
-            orderedScores.append(self.scores[i])
+            orderedScores.append(i)
 
         orderedScores.sort()
 
@@ -92,7 +92,7 @@ def sortTeams():
         # Find the minimum element in remaining unsorted array 
         max_idx = i 
         for j in range(i+1, len(teams)): 
-            if teams[max_idx].gen_average() < teams[j].gen_average(): 
+            if teams[max_idx].genAverage() < teams[j].genAverage(): 
                 max_idx = j 
         # Swap the found minimum element with the first element         
         teams[i], teams[max_idx] = teams[max_idx], teams[i]
@@ -187,7 +187,4 @@ if __name__ == "__main__":
     # book = xlrd.open_workbook(filedialog.askopenfilename(initialdir = "/",title = "Select File",filetypes = (("xlsx files","*.xlsx"),("xls files","*.xls"),("all files","*.*"))))
     book = xlrd.open_workbook('example.xls')
     get_teams()
-    for team in teams:
-        print('{number}         {scores}'.format(number = team.number, scores = team.scores))    
-    input()
     app.run()
