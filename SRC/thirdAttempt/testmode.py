@@ -47,17 +47,18 @@ writable = [
 ]
 
 workbook = xlwt.Workbook()
-teamSheet = workbook.add_sheet(sheetname='Teams', True)
-entrySheet = workbook.add_sheet(sheetname='Entry', True)
+teamSheet = workbook.add_sheet(sheetname='Teams')
+entrySheet = workbook.add_sheet(sheetname='Entry')
 
 for i in range(len(writable)):
     teamSheet.write(i, 0, writable[i][0])
     teamSheet.write(i, 1, writable[i][1])
 
 for i in range(randint(0,480)):
-    team = writable[randint(0, len(writable) - 1)][0]
+    teamLoc = randint(0, len(writable) - 1)
+    team = writable[teamLoc][0]
     score = randint(0, 500)
-    entrySheet(i,0 team)
-    entrySheet(i,1 score)
+    entrySheet.write(i,0, team)
+    entrySheet.write(i,1, score)
 
 workbook.save('example.xls')
