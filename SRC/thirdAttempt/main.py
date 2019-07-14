@@ -1,6 +1,7 @@
 import xlrd
 import logging
 from flask import Flask
+from subprocess import call, check_output
 from tkinter import filedialog
 from config import FONT_SIZE,  TOPSCORES
 
@@ -56,7 +57,7 @@ def get_teams():
         try:
             teams.append(Team(number=int(sheet.cell(i,0).value), name=sheet.cell(i,1).value))
         except:
-            print('Error adding {number} to the list'.format(number = sheet.cell(i,0).value))
+            print('Error adding {number} to the teams list'.format(number = sheet.cell(i,0).value))
     
     get_scores()
 
@@ -66,24 +67,19 @@ def get_scores():
 
     try:
         for i in range(sheet.nrows - 1):
+            
             teamNumber = int(sheet.cell(i,0).value)
             score = int(sheet.cell(i,1).value)
+
+            print('TeamNumber: {teamNumber}\t\tScore: {score}'.format(teamNumber=teamNumber, score=score))
 
             if isinstance(teamNumber, (int, float)):
                 for team in teams:
                     if teamNumber is team.number:
                         team.scores.append(score)
-                        
-
-
+                        print('add {score} to {number}'.format(score=score, number=team.number))           
             else:
-                print(False)
-            '''
-            elif isinstance(teamNumber, float):
-                for team in teams:
-                    if teamNumber is team.number:
-                        team.scores.append(score)
-            '''
+                print('nothing to add')
     except:
         print('Failed to add Score')
 
@@ -103,14 +99,8 @@ app = Flask(__name__)
 def updateScoreBoard():
     # auto scroll JS Command “var scroll = setInterval(function(){ window.scrollBy(0,1000); }, 2000);”
     # refresh JS Command "document.location.reload(True)"
+    get_scores()
     sortTeams()
-
-    maxRound = 0
-
-    for team in teams:
-        if len(team.scores) > maxRound:
-            maxRound = len(team.scores)
-
 
     html = '''
     <table style=\"width:100%\">
@@ -124,20 +114,14 @@ def updateScoreBoard():
             <th>
             Team Name
             </th>
-            '''
-
-    for team in range(maxRound):
-        html += '''
-                <th>
-                Round {roundNum}
-                </th>
-                '''.format(roundNum = team + 1)
-
-
-    html += '''
+            <th>
+            Scores
+            </th>
+            
             <th>
             Top {average} Average
             </th>
+        </tr>
     '''.format(average= TOPSCORES)
 
     counter = 0
@@ -155,29 +139,16 @@ def updateScoreBoard():
                 <th>
                     {name}
                 </th>
-        '''.format( postion = counter, number = team.number, name = team.name)
-
-        for i in range(maxRound):
-            try:
-                html +=  '''
-                            <th>
-                            {score}
-                            </th>
-                        '''.format(team.scores[i])
-            except:
-                html += '''
-                            <th>
-                            
-                            </th>
-                        '''
-        html += '''
                 <th>
-                {average}
+                    {scores}
                 </th>
-            
-                '''.format(average = team.genAverage())
+                <th>
+                    {average}
+                </th>
+            </tr>
+            '''.format(postion = counter, number = team.number, name = team.name, scores=team.scores, average = team.genAverage())
+    
     html += '''
-    </tr>
     </table>
     '''
     return html    
@@ -186,5 +157,22 @@ def updateScoreBoard():
 if __name__ == "__main__":
     # book = xlrd.open_workbook(filedialog.askopenfilename(initialdir = "/",title = "Select File",filetypes = (("xlsx files","*.xlsx"),("xls files","*.xls"),("all files","*.*"))))
     book = xlrd.open_workbook('example.xls')
+    
+    
     get_teams()
+
+    try:
+        call('fuser -k 5000/tcp')
+        print('killed the Linux Port')
+    except:
+        try:
+            output = check_output('netstat  -ano  |  findstr  5000')
+            processID = output[-4:]
+            call(' taskkill  /F  /PID  {processID}'.format(processID=processID))
+            print('killed the windows port')
+        except:
+            print('Failed to kill process you may have to restart')
+    for team in teams:
+        print('{number}:    {scores}'.format(number=team.number, scores=team.scores))
+
     app.run()
