@@ -11,30 +11,11 @@ book = None
 teams = []
 
 class Team():
-    def __init__(self, number=None, name=None, scores=[]):
+    def __init__(self, number=None, name=None, scores='', average=None):
         self.number = number
         self.name = name
         self.scores = scores
-
-    def genAverage(self):
-
-        orderedScores = []
-        for i in self.scores:
-            orderedScores.append(i)
-
-        orderedScores.sort()
-
-        sum = 0
-        count = 1
-        for i in range(TOPSCORES):
-            try:
-                sum += orderedScores[i]
-                count += 1
-            except:
-                None
-
-        return sum / count
-
+        self.average = average
 
 '''
 !!!!IMPORTANT!!!!
@@ -47,6 +28,24 @@ A sheet named "Entry" with colum A consisting of Team numbers and colum B consis
 These pages can be in any order and additional pages can be added as well
 if one or both tho the sheets are not there the program will not run (see example)
 '''
+
+def genAverage(arr):
+    orderedScores = []
+    for i in arr:
+        orderedScores.append(i)
+
+    orderedScores.sort()
+
+    sum = 0
+    count = 1
+    for i in range(TOPSCORES):
+        try:
+            sum += orderedScores[i]
+            count += 1
+        except:
+            None
+
+    return sum / count
 
 
 def get_teams():
@@ -66,6 +65,20 @@ def get_scores():
     sheet = book.sheet_by_name('Entry')
 
     try:
+        for team in teams:
+            teamScores = []
+            for i in range(sheet.nrows - 1):
+                teamNumber = int(sheet.cell(i,0).value)
+                score = int(sheet.cell(i,1).value)
+                
+                if team.number == teamNumber:
+                    teamScores.append(score)
+            
+            team.average = genAverage(teamScores)
+            team.scores = str(teamScores).replace('[','').replace(']','')
+
+        # have to redo this code segment as to make sure it reads in values correctly
+        """
         for i in range(sheet.nrows - 1):
             
             teamNumber = int(sheet.cell(i,0).value)
@@ -80,6 +93,7 @@ def get_scores():
                         print('add {score} to {number}'.format(score=score, number=team.number))           
             else:
                 print('nothing to add')
+        """
     except:
         print('Failed to add Score')
 
@@ -88,7 +102,7 @@ def sortTeams():
         # Find the minimum element in remaining unsorted array 
         max_idx = i 
         for j in range(i+1, len(teams)): 
-            if teams[max_idx].genAverage() < teams[j].genAverage(): 
+            if teams[max_idx].average < teams[j].average: 
                 max_idx = j 
         # Swap the found minimum element with the first element         
         teams[i], teams[max_idx] = teams[max_idx], teams[i]
@@ -146,7 +160,7 @@ def updateScoreBoard():
                     {average}
                 </th>
             </tr>
-            '''.format(postion = counter, number = team.number, name = team.name, scores=team.scores, average = team.genAverage())
+            '''.format(postion = counter, number = team.number, name = team.name, scores=team.scores, average = team.average)
     
     html += '''
     </table>
