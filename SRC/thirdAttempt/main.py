@@ -164,6 +164,11 @@ def updateScoreBoard():
     
     html += '''
     </table>
+    <link rel="stylesheet" href="styles.css">
+     <script>
+     var scroll = setInterval(function(){ window.scrollBy(0,1000); }, 2000);
+     document.location.reload(True);
+     </script> 
     '''
     return html    
 
