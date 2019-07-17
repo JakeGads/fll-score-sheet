@@ -1,7 +1,7 @@
 import xlrd
 import xlwt
 import logging
-from flask import Flask
+from flask import Flask, render_template
 from subprocess import call, check_output
 from tkinter import filedialog
 from config import FONT_SIZE,  TOPSCORES
@@ -100,61 +100,13 @@ def updateScoreBoard():
     get_scores()
     sortTeams()
 
-    html = '''
-    <table style=\"width:100%\">
-        <tr>
-            <th>
-            Postion
-            </th>
-            <th>
-            Team #
-            </th>
-            <th>
-            Team Name
-            </th>
-            <th>
-            Scores
-            </th>
-            
-            <th>
-            Top {average} Average
-            </th>
-        </tr>
-    '''.format(average= TOPSCORES)
-
+    html = ''
     counter = 0
-
     for team in teams:
         counter += 1
-        html += '''
-            <tr>
-                <th>
-                    {postion}
-                </th>
-                <th>
-                    {number}
-                </th>
-                <th>
-                    {name}
-                </th>
-                <th>
-                    {scores}
-                </th>
-                <th>
-                    {average}
-                </th>
-            </tr>
-            '''.format(postion = counter, number = team.number, name = team.name, scores=team.scores, average = team.average)
-    
-    html += '''
-    </table>
-    <link rel="stylesheet" href=".\styles.css">
-     <script>
-     var scroll = setInterval(function(){ window.scrollBy(0,1000); }, 2000);
-     document.location.reload(True);
-     </script> 
-    '''
-    return html    
+        html += '<tr><th>{postion}</th><th>{number}</th><th>{name}</th><th>{scores}</th><th>{average}</th></tr>'.format(postion = counter, number = team.number, name = team.name, scores=team.scores, average = team.average)
+        
+    return render_template('main.html', average=TOPSCORES, additionalRows=html)    
 
 def finalize():
     None
