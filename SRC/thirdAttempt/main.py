@@ -1,4 +1,5 @@
 import xlrd
+import xlwt
 import logging
 from flask import Flask
 from subprocess import call, check_output
@@ -164,13 +165,16 @@ def updateScoreBoard():
     
     html += '''
     </table>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href=".\styles.css">
      <script>
      var scroll = setInterval(function(){ window.scrollBy(0,1000); }, 2000);
      document.location.reload(True);
      </script> 
     '''
     return html    
+
+def finalize():
+    None
 
 
 if __name__ == "__main__":
@@ -191,7 +195,14 @@ if __name__ == "__main__":
             print('killed the windows port')
         except:
             print('Failed to kill process you may have to restart')
-    for team in teams:
-        print('{number}:    {scores}'.format(number=team.number, scores=team.scores))
+    
+    try:
+        call('cls')
+    except:
+        call('clear')
+    finally:
+        None
 
     app.run()
+
+    finalize()
