@@ -64,7 +64,7 @@ def get_teams():
 
 def get_scores():
     sheet = book.sheet_by_name('Entry')
-
+    # I realize that this is very unoptimized but this has something to do with memory managment
     try:
         for team in teams:
             teamScores = []
@@ -78,23 +78,6 @@ def get_scores():
             team.average = genAverage(teamScores)
             team.scores = str(teamScores).replace('[','').replace(']','')
 
-        # have to redo this code segment as to make sure it reads in values correctly
-        """
-        for i in range(sheet.nrows - 1):
-            
-            teamNumber = int(sheet.cell(i,0).value)
-            score = int(sheet.cell(i,1).value)
-
-            print('TeamNumber: {teamNumber}\t\tScore: {score}'.format(teamNumber=teamNumber, score=score))
-
-            if isinstance(teamNumber, (int, float)):
-                for team in teams:
-                    if teamNumber is team.number:
-                        team.scores.append(score)
-                        print('add {score} to {number}'.format(score=score, number=team.number))           
-            else:
-                print('nothing to add')
-        """
     except:
         print('Failed to add Score')
 
