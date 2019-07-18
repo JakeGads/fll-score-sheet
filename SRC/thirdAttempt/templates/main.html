@@ -5,32 +5,19 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Scores</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='.\main.css'>
-    <script src='.\main.js'></script>
+    <style>
+    table, th, td {
+    border: 1px solid black;
+    width: 100%;
+    }
+    </style>
+    <script>
+    var scroll = setInterval(function(){ window.scrollBy(0,1000); }, 2000);
+    document.location.reload(True);
+    </script>
 </head>
 <body>
-
-<table>
-    <tr>
-        <td>
-        Postion
-        </td>
-        <td>
-        Team #
-        </td>
-        <td>
-        Team Name
-        </td>
-        <td>
-        Scores
-        </td>
-        <td>
-        Top {{average}} Average
-        </td>
-    </tr>
-
-    {{additionalRows}}
-
+{{table}}
 </table>
 </body>
 </html>

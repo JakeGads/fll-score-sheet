@@ -101,7 +101,7 @@ class teamTable(Table):
     teamNum = Col('Team #')
     teamName = Col('Name')
     scores = Col('Scores')
-    average = Col('Top {average} Score'.format(average=TOPSCORES))  
+    average = Col('Top {average} Average'.format(average=TOPSCORES))  
 
 class teamItem(object):
     def __init__(self, postion, team):
@@ -122,13 +122,15 @@ def updateScoreBoard():
 
     for i in range(len(teams)):
         try:
-            teamItems.append(teamItem(i, teams[i]))            
+            teamItems.append(teamItem(i + 1, teams[i]))            
         except:
             None
 
     table = teamTable(teamItems)
     
-    return table.__html__()
+    # so now we apply the old code but replace the body of the table in here
+
+    return render_template('main.html', table=table)
 
     
 def finalize():
