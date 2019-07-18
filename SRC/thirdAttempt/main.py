@@ -93,6 +93,23 @@ def sortTeams():
 
 app = Flask(__name__)
 
+from flask_table import Table, Col
+
+class teamTable(Table):
+    postion = Col('Postion')
+    teamNum = Col('Team #')
+    teamName = Col('Name')
+    scores = Col('Scores')
+    average = Col('Average')  
+
+class teamItem(object):
+    def __init__(self, postion, team):
+        self.postion = postion
+        self.teamNum = team.number
+        self.teamName = team.name
+        self.scores = team.scores
+        self.average = team.average
+
 @app.route('/')
 def updateScoreBoard():
     # auto scroll JS Command “var scroll = setInterval(function(){ window.scrollBy(0,1000); }, 2000);”
@@ -100,14 +117,15 @@ def updateScoreBoard():
     get_scores()
     sortTeams()
 
-    html = ''
-    counter = 0
-    for team in teams:
-        counter += 1
-        html += '<tr><th>{postion}</th><th>{number}</th><th>{name}</th><th>{scores}</th><th>{average}</th></tr>'.format(postion = counter, number = team.number, name = team.name, scores=team.scores, average = team.average)
-        
-    return render_template('main.html', average=TOPSCORES, additionalRows=html)    
+    teamItems = []
 
+    for i in range(len(teams)):
+        try:
+            teamItems.append(teamItem(i, teams[i]))            
+        except:
+            None
+
+    
 def finalize():
     None
 
