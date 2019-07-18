@@ -38,11 +38,11 @@ def genAverage(arr):
     orderedScores.sort()
 
     sum = 0
-    count = 1
+    count = 0
     for i in range(TOPSCORES):
         try:
-            sum += orderedScores[i]
             count += 1
+            sum += orderedScores[i]
         except:
             None
 
@@ -124,6 +124,10 @@ def updateScoreBoard():
             teamItems.append(teamItem(i, teams[i]))            
         except:
             None
+
+    table = teamTable(teamItems)
+    
+    return table.__html__()
 
     
 def finalize():
