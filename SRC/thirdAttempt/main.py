@@ -41,12 +41,13 @@ def genAverage(arr):
     count = 0
     for i in range(TOPSCORES):
         try:
-            count += 1
             sum += orderedScores[i]
+            count += 1
         except:
-            None
+            if count is 0:
+                count = 1
 
-    return sum / count
+    return sum / count    
 
 
 def get_teams():
@@ -100,7 +101,7 @@ class teamTable(Table):
     teamNum = Col('Team #')
     teamName = Col('Name')
     scores = Col('Scores')
-    average = Col('Average')  
+    average = Col('Top {average} Score'.format(average=TOPSCORES))  
 
 class teamItem(object):
     def __init__(self, postion, team):
@@ -108,7 +109,7 @@ class teamItem(object):
         self.teamNum = team.number
         self.teamName = team.name
         self.scores = team.scores
-        self.average = team.average
+        self.average = round(team.average, 2)
 
 @app.route('/')
 def updateScoreBoard():
