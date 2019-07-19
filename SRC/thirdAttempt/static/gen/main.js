@@ -21,6 +21,7 @@ function main(){
         }
         else{
             console.log('Resetting the view');
+            $("html, body").animate({ scrollTop : 0}, "slow")
             document.location.reload(true);
         }
     },
