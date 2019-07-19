@@ -35,7 +35,7 @@ def genAverage(arr):
     for i in arr:
         orderedScores.append(i)
 
-    orderedScores.sort()
+    orderedScores.sort(reverse=True)
 
     sum = 0
     count = 0
