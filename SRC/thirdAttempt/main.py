@@ -2,6 +2,7 @@ import xlrd
 import xlwt
 import logging
 from flask import Flask, render_template
+from flask_assets import Bundle, Environment
 from subprocess import call, check_output
 from tkinter import filedialog
 from config import FONT_SIZE,  TOPSCORES
@@ -94,6 +95,10 @@ def sortTeams():
 
 app = Flask(__name__)
 
+js = Bundle('main.js', output='gen/main.js')
+assets = Environment(app)
+assets.register('main_js', js)
+
 from flask_table import Table, Col
 
 class teamTable(Table):
@@ -111,10 +116,13 @@ class teamItem(object):
         self.scores = team.scores
         self.average = round(team.average, 2)
 
+
+
 @app.route('/')
 def updateScoreBoard():
     # auto scroll JS Command “var scroll = setInterval(function(){ window.scrollBy(0,1000); }, 2000);”
     # refresh JS Command "document.location.reload(True)"
+    print('Generating Scores and Sorting the teams')
     get_scores()
     sortTeams()
 

@@ -12,37 +12,12 @@
     font-size: 150%
     }
     </style>
-    <script>
-    var millisecondsToWait = 1;
-    var millisecondsToPause = 3000;
-    var startTime = new Date().getTime();
-    
-
-    var scroll = setInterval(function(){
-        var now = new Date().getTime();
-        while(now + millisecondsToPause > new Date().getTime()){}
-        console.log("lowering")
-        window.scrollBy(0,50); 
-        }, 
-        200);
-    var shouldpass = 0
-    var reset = setInterval(function(){
-        //$('html, body').animate({ scrollTop: 0 }, 'fast');
-        if(shouldpass < 17){
-            shouldpass = shouldpass + 1;
-            console.log('Skipping this reset');
-        }
-        else{
-            document.body.scrollTo(0,0)
-            console.log('Resetting the view');
-            document.location.reload(true);
-        }
-    },
-    2400);
-    </script>
+    {% assets "main_js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 </head>
 <body>
+<div id="TopOfPage"></div> 
 {{table}}
-</table>
 </body>
 </html>
