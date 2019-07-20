@@ -1,31 +1,31 @@
 function main(){
-    var millisecondsToWait = 1;
-    var millisecondsToPause = 3000;
-    var startTime = new Date().getTime();
-    
-
+    var millisecondsToPause = 5000;
+    var counter = 0;
     var scroll = setInterval(function(){
         var now = new Date().getTime();
         while(now + millisecondsToPause > new Date().getTime()){}
-        console.log("lowering")
-        window.scrollBy(0,50); 
-        }, 
-        200);
-    var shouldpass = 0
-    var elem = document.getElementById("TopOfPage")
-    var reset = setInterval(function(){
-        //$('html, body').animate({ scrollTop: 0 }, 'fast');
-        if(shouldpass < 14){
-            shouldpass = shouldpass + 1;
-            console.log('Skipping Reset Request #' + shouldpass + ' of 14');
+
+        if($(window).scrollTop() + $(window).height() != $(document).height()) {
+            console.log("lowering round " + counter)
+            window.scrollBy(0,50);
+            counter += 1;
         }
         else{
-            console.log('Resetting the view');
-            $("html, body").animate({ scrollTop : 0}, "slow")
+            console.log("Resetting location and reloading the page")
+            $("html, body").animate({ scrollTop : 0});
             document.location.reload(true);
-        }
-    },
-    2400);
+        } 
+        }, 
+        200);
+}
+
+function getDocHeight() {
+    var D = document;
+    return Math.max(
+        D.body.scrollHeight, D.documentElement.scrollHeight,
+        D.body.offsetHeight, D.documentElement.offsetHeight,
+        D.body.clientHeight, D.documentElement.clientHeight
+    );
 }
 
 main();
