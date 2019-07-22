@@ -1,14 +1,18 @@
 function main(){
-    var millisecondsToPause = 5000;
-    var counter = 0;
+    // here is how long we pause between scrolling down
+    let millisecondsToPause = 5 * 1000;
+    // this counts how many pixels that have moved down on the screen
+    // it currently set to how far it sees in the page -1 (for an additional pause at the end)
+    let counter = document.documentElement.scrollHeight-1;
 
-    
-
-    var scroll = setInterval(function(){
-        var now = new Date().getTime();
+    let scroll = setInterval(function(){
+        //re-ups the current time so that it can tell how long to wait
+        let now = new Date().getTime();
+        //the empty waiting while loop
         while(now + millisecondsToPause > new Date().getTime()){}
 
-        var height = document.documentElement.scrollHeight;
+        // calculates the current height
+        let height = document.documentElement.scrollHeight;
 
         if(counter <= height) {
             console.log("lowering round " + counter);
@@ -18,7 +22,7 @@ function main(){
         else{
             console.log("Resetting location and reloading the page");
             $("html, body").animate({ scrollTop : 0}, "fast");
-            document.location.reload(true)
+            document.location.reload()
         } 
         }, 
         200);
