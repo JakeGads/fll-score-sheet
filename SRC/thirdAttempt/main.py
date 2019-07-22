@@ -1,7 +1,7 @@
 import xlrd
 import xlwt
 import logging
-from flask import Flask, render_template
+from flask import Flask, render_template, Markup
 from flask_assets import Bundle, Environment
 from subprocess import call, check_output
 from tkinter import filedialog
@@ -66,7 +66,7 @@ def get_teams():
 
 def get_scores():
     sheet = book.sheet_by_name('Entry')
-    # I realize that this is very unoptimized but this has something to do with memory managment
+    # I realize that this is very un-optimized but this has something to do with memory management
     try:
         for team in teams:
             teamScores = []
@@ -99,25 +99,6 @@ js = Bundle('main.js', output='gen/main.js')
 assets = Environment(app)
 assets.register('main_js', js)
 
-from flask_table import Table, Col
-
-class teamTable(Table):
-    postion = Col('Postion')
-    teamNum = Col('Team #')
-    teamName = Col('Name')
-    scores = Col('Scores')
-    average = Col('Top {average} Average'.format(average=TOPSCORES))  
-
-class teamItem(object):
-    def __init__(self, postion, team):
-        self.postion = postion
-        self.teamNum = team.number
-        self.teamName = team.name
-        self.scores = team.scores
-        self.average = round(team.average, 2)
-
-
-
 @app.route('/')
 def updateScoreBoard():
     # auto scroll JS Command “var scroll = setInterval(function(){ window.scrollBy(0,1000); }, 2000);”
@@ -126,19 +107,25 @@ def updateScoreBoard():
     get_scores()
     sortTeams()
 
-    teamItems = []
+    table = ''
+    for pos in range(len(teams)):
+        table += '''
+        <tr>
+            <td class="cell100 column2">{pos}</td>\n
+            <td class="cell100 column2">{teamNum}</td>\n
+            <td class="cell100 column3">{name}</td>\n
+            <td class="cell100 column4">{scores}</td>\n
+            <td class="cell100 column5">{average}</td>\n
+        </tr>    
+        '''.format(
+            pos = pos + 1,
+            teamNum = teams[pos].number,
+            name = teams[pos].name,
+            scores = teams[pos].scores,
+            average = round(teams[pos].average, 2)
+        )
 
-    for i in range(len(teams)):
-        try:
-            teamItems.append(teamItem(i + 1, teams[i]))            
-        except:
-            None
-
-    table = teamTable(teamItems)
-    
-    # so now we apply the old code but replace the body of the table in here
-
-    return render_template('main.html', table=table)
+    return render_template('main.html', table=Markup(table), average=TOPSCORES)
 
     
 def finalize():

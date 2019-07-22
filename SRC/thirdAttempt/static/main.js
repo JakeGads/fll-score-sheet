@@ -22,7 +22,7 @@ function main(){
         else{
             console.log("Resetting location and reloading the page");
             $("html, body").animate({ scrollTop : 0}, "fast");
-            document.location.reload()
+            //document.location.reload()
         } 
         }, 
         200);
