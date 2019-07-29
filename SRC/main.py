@@ -99,22 +99,20 @@ def get_scores():
         if i is 0:
             continue
         try:
-            scores.append({'team': sheet.cell(rowx=i,cellx=0).value, 'score': sheet.cell(rowx=i,cellx=1).value})
+            scores.append({'team': int(sheet.cell(rowx=i,cellx=0).value), 'score': int(sheet.cell(rowx=i,cellx=1).value)})
         except:
             continue
 
-    
-    for score in scores:
+    for team in teams:
         team_scores = []
-        for team in teams:
+        for score in scores:
             if score['team'] == team.team:
                 team_scores.append(score['score'])
         
         team.average = genAverage(team_scores)
         team.scores = str(team_scores).replace('[', '').replace(']', '')
+        
 
-    except:
-        print('Failed to add Score')
 
 def sortTeams():
     for i in range(len(teams)):   
@@ -138,8 +136,9 @@ assets.register('main_js', js)
 def updateScoreBoard():
     # auto scroll JS Command “var scroll = setInterval(function(){ window.scrollBy(0,1000); }, 2000);”
     # refresh JS Command "document.location.reload(True)"
-    print('Generating Scores and Sorting the teams')
+    print('Generating Scores')
     get_scores()
+    print('Sorting the teams')
     sortTeams()
 
     table = ''
@@ -171,7 +170,7 @@ def finalize():
 # The main
 if __name__ == "__main__":
     # sets the book to what the user selects in the tk dialogue
-    book = xlrd.open_workbook(filedialog.askopenfilename(initialdir = "/",title = "Select File",filetypes = (("xlsx files","*.xlsx"),("xls files","*.xls"),("all files","*.*"))))
+    book = xlrd.open_workbook(filedialog.askopenfilename(title = "Select File",filetypes = (("xlsx files","*.xlsx"),("xls files","*.xls"),("all files","*.*"))))
     
     # the testing book
     # book = xlrd.open_workbook('example.xls')
