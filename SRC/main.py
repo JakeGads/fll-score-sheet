@@ -81,7 +81,7 @@ def get_teams():
     # reads through the team list sheet in order to start making the team list
     sheet = book.sheet_by_name('Teams')
 
-    for i in range(sheet.nrows - 1):
+    for i in range(sheet.nrows):
         
         try:
             teams.append(Team(number=int(sheet.cell(i,0).value), name=sheet.cell(i,1).value))
@@ -99,19 +99,24 @@ def get_scores():
         if i is 0:
             continue
         try:
-            scores.append({'team': int(sheet.cell(rowx=i,cellx=0).value), 'score': int(sheet.cell(rowx=i,cellx=1).value)})
+            scores.append([int(sheet.cell(rowx=i,colx=0).value), int(sheet.cell(rowx=i,colx=1).value), False])
         except:
-            continue
+            print('couldn\'t append {teamNum} {score}'.format(teamNum=sheet.cell(rowx=i,colx=0).value, score=sheet.cell(rowx=i,colx=1).value))
 
     for team in teams:
         team_scores = []
         for score in scores:
-            if score['team'] == team.team:
-                team_scores.append(score['score'])
+            if score[0] == team.number:
+                team_scores.append(score[1])
+                score[2] = True
         
         team.average = genAverage(team_scores)
         team.scores = str(team_scores).replace('[', '').replace(']', '')
-        
+    
+    for i in scores:
+        if i[2] == False:
+            print(i)
+
 
 
 def sortTeams():
