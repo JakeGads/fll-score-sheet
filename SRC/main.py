@@ -154,8 +154,8 @@ def updateScoreBoard():
             <td class="cell100 column2">{pos}</td>\n
             <td class="cell100 column2">{teamNum}</td>\n
             <td class="cell100 column3">{name}</td>\n
-            <td class="cell100 column4">{scores}</td>\n
             <td class="cell100 column5">{average}</td>\n
+            <td class="cell100 column4">{scores}</td>\n
         </tr>    
         '''.format(
             pos = pos + 1,
