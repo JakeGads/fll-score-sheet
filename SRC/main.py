@@ -1,16 +1,39 @@
-import xlrd # xl reading
-import logging #xl writing
-from flask import Flask, render_template, Markup # webserver, template renderer and str to markup converter
-from flask_assets import Bundle, Environment # js and cs bundlers
+from os import system
 from subprocess import call, check_output # allows to access terminal and to read the terminal output
+
+# Native
+import logging #xl writing
 from tkinter import filedialog #file selections
+
+# Defined elsewhere
 from config import FONT_SIZE, TOPSCORES # self made
 
+try:
+    # third party
+    import xlrd # xl reading
+    from flask import Flask, render_template, Markup # webserver, template renderer and str to markup converter
+    from flask_assets import Bundle, Environment # js and cs bundlers
+except:
+    try:
+        # installer scripts
+        system('pip install -r requirments.txt --user')
+    except:
+        try:
+            system('pip install -r requirments.txt --user')
+        except:
+            try:
+                system('pip install xlrd flask flask_assets --user')
+            except:
+                print('Failed to install required packages may have to be done manually\n\npip install xlrd flask flask_assets')
+
+    # third party
+    import xlrd # xl reading
+    from flask import Flask, render_template, Markup # webserver, template renderer and str to markup converter
+    from flask_assets import Bundle, Environment # js and cs bundlers
 
 # sets these as the global variables
 book = None # The workbook that we will use to analyze
 teams = [] # Holds all of the teams 
-
 # Team becomes a way to sort or to organize the order
 class Team():
     def __init__(self, number=None, name=None, scores='', average=None):
@@ -71,19 +94,24 @@ def get_teams():
 def get_scores():
     #looks through the entry
     sheet = book.sheet_by_name('Entry')
-    # I realize that this is very un-optimized but this has something to do with memory management
-    try:
+    scores = []
+    for i in range(sheet.nrows):
+        if i is 0:
+            continue
+        try:
+            scores.append({'team': sheet.cell(rowx=i,cellx=0).value, 'score': sheet.cell(rowx=i,cellx=1).value})
+        except:
+            continue
+
+    
+    for score in scores:
+        team_scores = []
         for team in teams:
-            teamScores = []
-            for i in range(sheet.nrows - 1):
-                teamNumber = int(sheet.cell(i,0).value)
-                score = int(sheet.cell(i,1).value)
-                
-                if team.number == teamNumber:
-                    teamScores.append(score)
-            
-            team.average = genAverage(teamScores)
-            team.scores = str(teamScores).replace('[','').replace(']','')
+            if score['team'] == team.team:
+                team_scores.append(score['score'])
+        
+        team.average = genAverage(team_scores)
+        team.scores = str(team_scores).replace('[', '').replace(']', '')
 
     except:
         print('Failed to add Score')
