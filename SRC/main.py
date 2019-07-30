@@ -136,6 +136,8 @@ js = Bundle('main.js', output='gen/main.js')
 assets = Environment(app)
 assets.register('main_js', js)
 
+#TODO Bundle the rest of the css ... this is gonna take a while
+
 # the home (and only) page
 @app.route('/')
 def updateScoreBoard():
@@ -168,7 +170,15 @@ def updateScoreBoard():
     # returns the html from main.html with the table running through markup and the average score
     return render_template('main.html', table=Markup(table), average=TOPSCORES)
 
+@app.route('/dummy')
+def dummy_board():
+    return render_template('dummy.html')
+
+@app.route('/example')
+def example():
+    return render_template('external.html')
 # This function is left blank as I have not figured out how to run this at the destruction
+@app.route('/final')
 def finalize():
     None
 
