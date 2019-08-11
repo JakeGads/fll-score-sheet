@@ -1,6 +1,6 @@
 function main(){
     // here is how long we pause between scrolling down
-    let millisecondsToPause = 5 * 1000;
+    let millisecondsToPause = 3 * 1000;
     // this counts how many pixels that have moved down on the screen
     // it currently set to how far it sees in the page -1 (for an additional pause at the end)
     let counter = document.documentElement.scrollHeight-1;

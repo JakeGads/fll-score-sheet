@@ -231,18 +231,20 @@ th, td {
 
 .table100.ver1 th {
   font-family: Lato-Bold;
-  font-size: 18px;
+  font-size: 25px;
   color: #fff;
-  line-height: 1.4;
+  line-height: 1.2;
+  text-align: center;
 
   background-color: #6c7ae0;
 }
 
 .table100.ver1 td {
   font-family: Lato-Regular;
-  font-size: 15px;
+  font-size: 25px;
   color: #808080;
-  line-height: 1.4;
+  text-align: center;
+  line-height: 4;
 }
 
 .table100.ver1 .table100-body tr:nth-child(even) {
