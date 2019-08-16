@@ -1,6 +1,7 @@
 from os import (
     system,
     stat,
+    name as operating_system,
 )  # System allows me to see the platform and stat allows me to check the DT of a file
 from datetime import datetime
 from subprocess import (
@@ -94,6 +95,7 @@ These pages can be in any order and additional pages can be added as well
 if one or both tho the sheets are not there the program will not run (see example)
 '''
 
+# This should be the only used by team 272
 
 def genAverage(userList):
     # this will reverse order a deep copy of the list
@@ -280,11 +282,10 @@ if __name__ == '__main__':
         except:
             print('Failed to kill process you may have to restart')
 
-    try:
+    if operating_system == 'Windows':
         call('cls')
-    except:
+    else:
         call('clear')
-    finally:
-        None
+    
 
     app.run()
