@@ -71,8 +71,6 @@ except:
 file = None
 book = None  # The workbook that we will use to analyze
 teams = []  # Holds all of the teams
-first_visit = True
-last_reload = datetime.now()
 table = ''
 # Team becomes a way to sort or to organize the order
 class Team:
@@ -122,6 +120,11 @@ def genAverage(userList):
 
 def get_teams():
     # reads through the team list sheet in order to start making the team list
+    global book
+    global teams
+
+    book = xlrd.open_workbook(file)
+
     sheet = book.sheet_by_name('Teams')
     nums = []
     for i in teams:
@@ -171,6 +174,8 @@ def get_scores():
                 )
             )
 
+    global teams
+
     for team in teams:
         team_scores = []
         for score in scores:
@@ -182,11 +187,12 @@ def get_scores():
         team.scores = str(team_scores).replace('[', '').replace(']', '')
 
     for i in scores:
-        if i[2] == False:
+        if not i[2]:
             print(i)
 
 
 def sortTeams():
+    global teams
     for i in range(len(teams)):
         # Find the minimum element in remaining unsorted array
         max_idx = i
@@ -199,6 +205,7 @@ def sortTeams():
 
 # webserver info
 app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 # gets the javascript ready to import
 bundles = {
     'main_js': Bundle('main.js', output='gen/main.js'),
@@ -211,34 +218,41 @@ assets.register(bundles)
 # the home (and only) page
 @app.route('/')
 def updateScoreBoard():
-    if first_visit or datetime.fromtimestamp(stat(file)) > last_reload:
-        print('Checking for any new teams')
-        get_teams()
-        print('Generating Scores')
-        get_scores()
-        print('Sorting the teams')
-        sortTeams()
-        last_reload = datetime.now()
-        first_visit = False
+    print('Checking for any new teams')
+    get_teams()
+    print('Generating Scores')
+    get_scores()
+    print('Sorting the teams')
+    sortTeams()
 
-        table = ''
-        # goes through each team and makes an html row out of them
-        for pos in range(len(teams)):
-            table += '''
-            <tr>
-                <td class='cell100 column2'>{pos}</td>\n
-                <td class='cell100 column2'>{teamNum}</td>\n
-                <td class='cell100 column3'>{name}</td>\n
-                <td class='cell100 column5'>{average}</td>\n
-                <td class='cell100 column4'>{scores}</td>\n
-            </tr>    
-            '''.format(
-                pos=pos + 1,
-                teamNum=teams[pos].number,
-                name=teams[pos].name,
-                scores=teams[pos].scores,
-                average=round(teams[pos].average, 2),
-            )
+    table = ''
+    # goes through each team and makes an html row out of them
+    for pos in range(len(teams)):
+        table += '''
+        <tr>
+            <td class='cell100 column2'>{pos}</td>\n
+            <td class='cell100 column2'>{teamNum}</td>\n
+            <td class='cell100 column3'>{name}</td>\n
+            <td class='cell100 column5'>{average}</td>\n
+            <td class='cell100 column4'>{scores}</td>\n
+        </tr>    
+        '''.format(
+            pos=pos + 1,
+            teamNum=teams[pos].number,
+            name=teams[pos].name,
+            scores=teams[pos].scores,
+            average=round(teams[pos].average, 2),
+        )
+
+        print(
+            pos + 1,
+            teams[pos].number,
+            teams[pos].name,
+            teams[pos].scores,
+            round(teams[pos].average, 2),
+            sep = "\t",
+            end = "\n"
+        )
 
     # returns the html from main.html with the table running through markup and the average score
     return render_template('main.html', table=Markup(table), average=TOPSCORES)

@@ -19,15 +19,16 @@ function main(){
         let height = document.documentElement.scrollHeight;
 
         if(counter <= height) {
-            console.log("lowering round " + counter);
+            console.log("lowering round " + (counter/height) * 100 + "%");
             window.scrollBy(0,50);
             counter += 50;
         }
         else{
             console.log("Resetting location and reloading the page");
-            window.scrollBy(0, counter * -1)
-            document.location.reload()
-        } 
+            window.scrollBy(0, counter * -1);
+            counter = 0;
+            document.location.reload();
+        }
         }, 
         200);
 }
