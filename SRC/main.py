@@ -218,6 +218,8 @@ assets.register(bundles)
 # the home (and only) page
 @app.route('/')
 def updateScoreBoard():
+    global book
+    book = xlrd.open_workbook(file)
     print('Checking for any new teams')
     get_teams()
     print('Generating Scores')
