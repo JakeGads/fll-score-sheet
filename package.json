@@ -1,28 +1,20 @@
 {
-  "name": "fll-scoreboardapp",
+  "name": "FLL-Score-Sheet",
   "version": "1.0.0",
   "description": "",
-  "keywords": [],
-  "main": "src/index.js",
-  "dependencies": {
-    "fs": "0.0.1-security",
-    "react": "16.12.0",
-    "react-dom": "16.12.0",
-    "react-scripts": "^3.3.0"
-  },
-  "devDependencies": {
-    "typescript": "3.3.3"
-  },
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gadzygadz/FLL-Score-Sheet.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gadzygadz/FLL-Score-Sheet/issues"
+  },
+  "homepage": "https://github.com/gadzygadz/FLL-Score-Sheet#readme"
 }
