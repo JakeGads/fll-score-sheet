@@ -1,0 +1,26 @@
+{
+  "name": "fll-score-sheet",
+  "version": "1.0.0",
+  "description": "A host for the score sheet for the Lansdale Catholic Tune Up in PA",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gadzygadz/FLL-Score-Sheet.git"
+  },
+  "keywords": [
+    "FLL",
+    "Scoreboard"
+  ],
+  "author": "Jake Gadaleta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gadzygadz/FLL-Score-Sheet/issues"
+  },
+  "homepage": "https://github.com/gadzygadz/FLL-Score-Sheet#readme",
+  "devDependencies": {
+    "electron": "^8.2.5"
+  }
+}
