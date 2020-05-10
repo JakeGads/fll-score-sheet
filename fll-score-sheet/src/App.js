@@ -1,20 +1,26 @@
-import React from 'react'; //allows you to use reactive stuff
-import logo from './logo.svg'; // image import
-import './App.css'; //css import
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
 
-function Example() {
-  // NOTE: CLASSES RENDER AS with className
+function App() {
   return (
-    <div className="Example"> 
-      <header className="Example-header">
-        <img src={logo} className="Example-logo" alt="logo" />
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
       </header>
     </div>
   );
 }
 
-export default Example;
+export default App;
